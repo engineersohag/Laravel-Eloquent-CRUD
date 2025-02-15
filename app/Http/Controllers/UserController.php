@@ -28,17 +28,36 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $student = new Student;
+        // $student = new Student;
 
-        $student->name = $request->username;
-        $student->email = $request->useremail;
-        $student->age = $request->userage;
-        $student->phone = $request->userphone;
-        $student->city = $request->usercity;
-        $student->address = $request->useraddress;
-        $student->password = $request->userpassword;
+        // $student->name = $request->username;
+        // $student->email = $request->useremail;
+        // $student->age = $request->userage;
+        // $student->phone = $request->userphone;
+        // $student->city = $request->usercity;
+        // $student->address = $request->useraddress;
+        // $student->password = $request->userpassword;
 
-        $student->save();
+        // $student->save();
+
+        $request->validate([
+            "username" => 'required|string',
+            "useremail" => 'required|email',
+            "userage" => 'required|numeric',
+            "userphone" => 'required|numeric',
+            "usercity" => 'required|string',
+            "userpassword" => 'required|min:4',
+        ]);
+
+        Student::create([
+            'name' => $request->username,
+            'email' => $request->useremail,
+            'age' => $request->userage,
+            'phone' => $request->userphone,
+            'city' => $request->usercity,
+            'address' => $request->useraddress,
+            'password' => $request->userpassword
+        ]);
 
         return redirect('/')->with('status', 'New User Added Successfully.');
     }
@@ -57,7 +76,8 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
-        return view('updateuser');
+        $students = Student::find($id);
+        return view('updateuser', compact('students'));
     }
 
     /**
@@ -65,7 +85,36 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        
+        // $student = Student::find($id);
+
+        // $student->name = $request->username;
+        // $student->email = $request->useremail;
+        // $student->age = $request->userage;
+        // $student->phone = $request->userphone;
+        // $student->city = $request->usercity;
+        // $student->address = $request->useraddress;
+
+        // $student->save();
+
+        $request->validate([
+            "username" => 'required|string',
+            "useremail" => 'required|email',
+            "userage" => 'required|numeric',
+            "userphone" => 'required|numeric',
+            "usercity" => 'required|string',
+        ]);
+
+        $student = Student::where('id', $id)
+                            ->update([
+                                'name' => $request->username,
+                                'email' => $request->useremail,
+                                'age' => $request->userage,
+                                'phone' => $request->userphone,
+                                'city' => $request->usercity,
+                                'address' => $request->useraddress
+                            ]);
+
+        return redirect('/')->with('status', 'User Data Updated Successfully.');
     }
 
     /**
@@ -73,6 +122,9 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $students = Student::find($id);
+        $students->delete();
+
+        return redirect('/')->with('status', 'User Data Deleted Successfully.');
     }
 }

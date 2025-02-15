@@ -30,7 +30,11 @@
                     <a href="{{ route('users.show', $student->id) }}" class="btn btn-sm btn-primary">View</a>
                 </td>
                 <td>
-                    <a href="" class="btn btn-sm btn-danger">Delete</a>
+                    <form action="{{ route('users.destroy', $student->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                    </form>
                 </td>
                 <td>
                     <a href="{{ route('users.edit', $student->id) }}" class="btn btn-sm btn-warning">Update</a>
@@ -39,4 +43,9 @@
             </tr>
         @endforeach
     </table>
+
+    <div class="mt-4">
+        {{ $students->links() }}
+    </div>
+
 @endsection

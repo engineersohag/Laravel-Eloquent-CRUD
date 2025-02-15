@@ -12,7 +12,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        $students = Student::all();
+        $students = Student::simplePaginate(8);
 
         // $students = Student::find([2, 25], ['name', 'age']);
         // $students = Student::count();
